@@ -5,22 +5,52 @@ import './styles/styles.scss'
 //import { template } from 'babel-core'
 
 
-
 class LuckCheckingApp extends React.Component {
+  constructor(props) {
+    super(props)
+    this.handleDeleteNotes = this.handleDeleteNotes.bind(this)
+    this.generateRandomNumber = this.generateRandomNumber.bind(this)
+    this.state = {
+      title: 'Check Your Luck',
+      subtitle: 'Let computer generate random number and see how many tries you need to get the same number',
+      number: 0,
+      notes: ['one'],
+      tryCount: 0
+    }
+  }
+  generateRandomNumber() {
+    this.setState((prevState) => {
+      return {
+        tryCount: prevState.tryCount + 1,
+        number: Math.ceil(Math.random() * 10)
+
+      }
+    })
+  }
+
+  handleDeleteNotes() {
+    this.setState(() => {
+      return {
+        notes: []
+      }
+    })
+  }
   render() {
-    const title = 'Check Your Luck';
-    const subtitle = 'Let computer generate random number and see how many tries you need to get the same number';
-    const notes = ['one', 'two', 'three'];
-    let number = 0;
-    let luckyNumber = 0;
-    let tryCounts = 0;
-
-
     return (
       <div>
-        <Header title={title} subtitle={subtitle} />
-        <GenerateNumber number={number} />
-        <Notes notes={notes} />
+        <Header title={this.state.title} subtitle={this.state.subtitle} />
+        <GenerateNumber
+          generateRandomNumber={this.generateRandomNumber}
+          number={this.state.number}
+          tryCount={this.state.tryCount} />
+        <Notes
+          notes={this.state.notes}
+          handleDeleteNotes={this.handleDeleteNotes}
+          handleAddNote={this.handleAddNote}
+        />
+        <AddNote
+          handleAddNotes={this.handleAddNote}
+        />
       </div>
     )
   }
@@ -38,42 +68,24 @@ class Header extends React.Component {
 }
 
 class GenerateNumber extends React.Component {
-  constructor(props) {
-    super(props);
-    this.generateNumber = this.generateNumber.bind(this)
-  }
-  generateNumber = () => {
-    this.props.number = Math.ceil(Math.random() * 10)
-  }
   render() {
     return (
       <div>
         <h4>Generate random number</h4>
-        <button onClick={this.generateNumber}>Generate Random Number</button>
+        <button onClick={this.props.generateRandomNumber}>Generate Random Number</button>
         <p>Number : {this.props.number}</p>
+        <p>Try count : {this.props.tryCount}</p>
       </div>
     )
   }
 }
 
 class Notes extends React.Component {
-  constructor(props) {
-    super(props);
-    this.handleAddNotes = this.handleAddNotes.bind(this)
-  }
-  handleAddNotes = (e) => {
-    e.preventDefault()
-    const option = e.target.elements.option.value.trim()
-    if (option) {
-      this.props.notes.push(option)
-      e.target.elements.option.value = ''
-      console.log(option)
-    }
-  }
   render() {
     return (
       <div>
-        <form onSubmit={this.handleAddNotes}>
+        <button onClick={this.props.handleDeleteNotes}>Delete All Notes</button>
+        <form onSubmit={this.props.handleAddNote}>
           <h3>Reminder</h3>
           {this.props.notes.length === 0 ? <p>Add Note</p> : <p>Notes for today</p>}
           <ul>
@@ -87,72 +99,32 @@ class Notes extends React.Component {
   }
 }
 
-class Note extends React.Component {
-  onFormSubmit = (e) => {
-    e.preventDefault()
-    const option = e.target.elements.option.value;
-    if (option) {
-      this.props.notes.push(option)
-      e.target.elements.option.value = ''
+
+
+class AddNote extends React.Component {
+  constructor(props) {
+    super(props)
+    this.handleAddNote = this.handleAddNote.bind(this)
+  }
+  handleAddNote(e) {
+    e.prevent.defaul()
+    const note = e.target.elements.note.value.trim()
+    if (note) {
+      this.props.handleAddNote(note)
     }
   }
   render() {
     return (
       <div>
-
+        <form onSubmit={this.handleAddNote}>
+          <input type="text" name="note" />
+          <button>ADD NOTE</button>
+        </form>
       </div>
     )
   }
 }
 
-
-
-let number = 0
-let luckyNumber = 0
-
-const generateNumber = () => {
-  number = Math.ceil(Math.random() * 10)
-  renderCheckYourLuck()
-}
-
-const generateLuckyNumber = () => {
-  luckyNumber = Math.ceil(Math.random() * 10)
-  app.tryCounts++
-  if (number === luckyNumber) {
-    alert(`BINGO you were able to generate random number on ${app.tryCounts} try!!!`)
-  }
-  renderCheckYourLuck()
-}
-
-
-const startOverButton = () => {
-  number = 0
-  luckyNumber = 0
-  app.notes = []
-  app.tryCounts = 0
-  renderCheckYourLuck()
-}
-
-const renderCheckYourLuck = () => {
-  const template = (
-    <div>
-      <p>Click button to see how quick you will get the same number</p>
-      <button onClick={generateLuckyNumber}>Try your luck</button>
-      <p>Lucky number : {luckyNumber} Try count : {app.tryCounts}</p>
-      <button onClick={startOverButton}>START OVER</button>
-      <form onSubmit={onFormSubmit}>
-        <h3>Reminder</h3>
-        {app.notes.length === 0 ? <p>Add Note</p> : <p>Notes for today</p>}
-        <ul>
-          {app.notes.map((option) => <li key={option}><p>{option}</p></li>)}
-        </ul>
-        <input type="text" name="option" placeholder="type note" />
-        <button>Submit</button>
-      </form>
-    </div>
-  )
-  ReactDOM.render(template, document.getElementById('app'))
-}
 
 
 
