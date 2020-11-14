@@ -11,12 +11,13 @@ class LuckCheckingApp extends React.Component {
     this.handleDeleteNotes = this.handleDeleteNotes.bind(this)
     this.generateRandomNumber = this.generateRandomNumber.bind(this)
     this.generateUserNumber = this.generateUserNumber.bind(this)
+    this.handleAddNote = this.handleAddNote.bind(this)
     this.state = {
       title: 'Check Your Luck',
       subtitle: 'Let computer generate random number and see how many tries you need to get the same number',
       randomNumber: 0,
       userNumber: 0,
-      notes: ['one', 'two'],
+      notes: [],
       tryCount: 0,
     }
   }
@@ -40,13 +41,26 @@ class LuckCheckingApp extends React.Component {
     }
   }
   handleDeleteNotes() {
-    console.log(this.state.notes)
     this.setState(() => {
       return {
         notes: []
       }
     })
   }
+  handleAddNote(e) {
+    e.preventDefault()
+    const note = e.target.elements.note.value.trim()
+    this.state.notes.push(note)
+    e.target.elements.note.value = ''
+    console.log(this.state.notes)
+    this.setState(() => {
+      return {
+        notes: this.state.notes
+      }
+    })
+  }
+
+
 
   render() {
     return (
@@ -55,7 +69,6 @@ class LuckCheckingApp extends React.Component {
         <GenerateRandomNumber
           generateRandomNumber={this.generateRandomNumber}
           randomNumber={this.state.randomNumber}
-
         />
         <GenerateUserNumber
           generateUserNumber={this.generateUserNumber}
@@ -66,11 +79,10 @@ class LuckCheckingApp extends React.Component {
         <Notes
           notes={this.state.notes}
           handleDeleteNotes={this.handleDeleteNotes}
-          handleAddNote={this.handleAddNote}
-
         />
         <AddNote
-          handleAddNotes={this.handleAddNote}
+          handleAddNote={this.handleAddNote}
+          notes={this.state.notes}
         />
       </div>
     )
@@ -93,8 +105,8 @@ class GenerateRandomNumber extends React.Component {
     return (
       <div>
         <h4>Generate random number</h4>
-        <button onClick=
-          {this.props.generateRandomNumber}
+        <button onClick={this.props.generateRandomNumber}
+          disabled={this.props.randomNumber}
         >Generate Random Number</button>
         <p>Number : {this.props.randomNumber}</p>
       </div>
@@ -107,7 +119,9 @@ class GenerateUserNumber extends React.Component {
     return (
       <div>
         <h4>Generate User number</h4>
-        <button onClick={this.props.generateUserNumber}>Generate User Number</button>
+        <button onClick={this.props.generateUserNumber}
+          disabled={!this.props.randomNumber}
+        >Generate User Number</button>
         <p>Number : {this.props.userNumber}</p>
         <p>Try count : {this.props.tryCount}</p>
       </div>
@@ -120,7 +134,7 @@ class Notes extends React.Component {
     return (
       <div>
         <button onClick={this.props.handleDeleteNotes}>Delete All Notes</button>
-        <form onSubmit={this.props.handleAddNote}>
+        <form>
           <h3>Reminder</h3>
           {this.props.notes.length === 0 ? <p>Add Note</p> : <p>Notes for today</p>}
           {
@@ -142,23 +156,11 @@ class Note extends React.Component {
   }
 }
 
-
 class AddNote extends React.Component {
-  constructor(props) {
-    super(props)
-    this.handleAddNote = this.handleAddNote.bind(this)
-  }
-  handleAddNote(e) {
-    e.preventDefault()
-    const note = e.target.elements.note.value.trim()
-    if (note) {
-      alert(note)
-    }
-  }
   render() {
     return (
       <div>
-        <form onSubmit={this.handleAddNote}>
+        <form onSubmit={this.props.handleAddNote}>
           <input type="text" name="note" />
           <button>ADD NOTE</button>
         </form>
@@ -166,7 +168,6 @@ class AddNote extends React.Component {
     )
   }
 }
-
 
 
 
