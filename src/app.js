@@ -16,7 +16,7 @@ class LuckCheckingApp extends React.Component {
       subtitle: 'Let computer generate random number and see how many tries you need to get the same number',
       randomNumber: 0,
       userNumber: 0,
-      notes: ['one'],
+      notes: ['one', 'two'],
       tryCount: 0,
     }
   }
@@ -55,6 +55,7 @@ class LuckCheckingApp extends React.Component {
         <GenerateRandomNumber
           generateRandomNumber={this.generateRandomNumber}
           randomNumber={this.state.randomNumber}
+
         />
         <GenerateUserNumber
           generateUserNumber={this.generateUserNumber}
@@ -66,6 +67,7 @@ class LuckCheckingApp extends React.Component {
           notes={this.state.notes}
           handleDeleteNotes={this.handleDeleteNotes}
           handleAddNote={this.handleAddNote}
+
         />
         <AddNote
           handleAddNotes={this.handleAddNote}
@@ -91,7 +93,9 @@ class GenerateRandomNumber extends React.Component {
     return (
       <div>
         <h4>Generate random number</h4>
-        <button onClick={this.props.generateRandomNumber}>Generate Random Number</button>
+        <button onClick=
+          {this.props.generateRandomNumber}
+        >Generate Random Number</button>
         <p>Number : {this.props.randomNumber}</p>
       </div>
     )
@@ -119,15 +123,24 @@ class Notes extends React.Component {
         <form onSubmit={this.props.handleAddNote}>
           <h3>Reminder</h3>
           {this.props.notes.length === 0 ? <p>Add Note</p> : <p>Notes for today</p>}
-          <ul>
-            {this.props.notes.map((note) => <li key={note}><p>{note}</p></li>)}
-          </ul>
+          {
+            this.props.notes.map((note) => <Note key={note} noteText={note} />)
+          }
         </form>
       </div>
     )
   }
 }
 
+class Note extends React.Component {
+  render() {
+    return (
+      <div>
+        {this.props.noteText}
+      </div>
+    )
+  }
+}
 
 
 class AddNote extends React.Component {
