@@ -8,6 +8,7 @@ import './styles/styles.scss'
 class LuckCheckingApp extends React.Component {
   constructor(props) {
     super(props)
+    this.resetAll = this.resetAll.bind(this)
     this.handleDeleteNotes = this.handleDeleteNotes.bind(this)
     this.generateRandomNumber = this.generateRandomNumber.bind(this)
     this.generateUserNumber = this.generateUserNumber.bind(this)
@@ -21,6 +22,16 @@ class LuckCheckingApp extends React.Component {
       tryCount: 0,
     }
   }
+  resetAll() {
+    this.setState(() => {
+      return {
+        randomNumber: 0,
+        userNumber: 0,
+        tryCount: 0
+      }
+    })
+  }
+
   generateRandomNumber() {
     this.setState(() => {
       return {
@@ -28,6 +39,7 @@ class LuckCheckingApp extends React.Component {
       }
     })
   }
+
   generateUserNumber() {
     if (this.state.randomNumber === this.state.userNumber) {
       return alert('bingo')
@@ -40,6 +52,7 @@ class LuckCheckingApp extends React.Component {
       })
     }
   }
+
   handleDeleteNotes() {
     this.setState(() => {
       return {
@@ -47,6 +60,7 @@ class LuckCheckingApp extends React.Component {
       }
     })
   }
+
   handleAddNote(e) {
     e.preventDefault()
     const note = e.target.elements.note.value.trim()
@@ -60,13 +74,12 @@ class LuckCheckingApp extends React.Component {
     })
   }
 
-
-
   render() {
     return (
       <div>
         <Header title={this.state.title} subtitle={this.state.subtitle} />
         <GenerateRandomNumber
+          resetAll={this.resetAll}
           generateRandomNumber={this.generateRandomNumber}
           randomNumber={this.state.randomNumber}
         />
@@ -104,6 +117,7 @@ class GenerateRandomNumber extends React.Component {
   render() {
     return (
       <div>
+        <button onClick={this.props.resetAll}>RESET ALL</button>
         <h4>Generate random number</h4>
         <button onClick={this.props.generateRandomNumber}
           disabled={this.props.randomNumber}
@@ -168,7 +182,6 @@ class AddNote extends React.Component {
     )
   }
 }
-
 
 
 ReactDOM.render(<LuckCheckingApp />, document.getElementById('app'))
