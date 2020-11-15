@@ -64,15 +64,23 @@ class LuckCheckingApp extends React.Component {
   handleAddNote(e) {
     e.preventDefault()
     const note = e.target.elements.note.value.trim()
-    this.state.notes.push(note)
-    e.target.elements.note.value = ''
-    console.log(this.state.notes)
-    this.setState(() => {
-      return {
-        notes: this.state.notes
-      }
-    })
+    if (!note) {
+      alert('Enter valid value to add note!')
+    } else if (this.state.notes.indexOf(note) > -1) {
+      e.target.elements.note.value = ''
+      alert('This note already exists')
+    } else {
+      this.state.notes.push(note)
+      e.target.elements.note.value = ''
+      console.log(this.state.notes)
+      this.setState(() => {
+        return {
+          notes: this.state.notes
+        }
+      })
+    }
   }
+
 
   render() {
     return (
@@ -95,7 +103,6 @@ class LuckCheckingApp extends React.Component {
         />
         <AddNote
           handleAddNote={this.handleAddNote}
-          notes={this.state.notes}
         />
       </div>
     )
