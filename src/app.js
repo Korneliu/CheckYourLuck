@@ -148,32 +148,29 @@ class GenerateUserNumber extends React.Component {
   }
 }
 
-class Notes extends React.Component {
-  render() {
-    return (
-      <div>
-        <button onClick={this.props.handleDeleteNotes}>Delete All Notes</button>
-        <form>
-          <h3>Reminder</h3>
-          {this.props.notes.length === 0 ? <p>Add Note</p> : <p>Notes for today</p>}
-          {
-            this.props.notes.map((note) => <Note key={note} noteText={note} />)
-          }
-        </form>
-      </div>
-    )
-  }
+const Notes = (props) => {
+  return (
+    <div>
+      <button onClick={props.handleDeleteNotes}>Delete All Notes</button>
+      <form>
+        <h3>Reminder</h3>
+        {props.notes.length === 0 ? <p>Add Note</p> : <p>Notes for today</p>}
+        {
+          props.notes.map((note) => <Note key={note} noteText={note} />)
+        }
+      </form>
+    </div>
+  )
 }
 
-class Note extends React.Component {
-  render() {
-    return (
-      <div>
-        {this.props.noteText}
-      </div>
-    )
-  }
+const Note = (props) => {
+  return (
+    <div>
+      {props.noteText}
+    </div>
+  )
 }
+
 
 class AddNote extends React.Component {
   render() {
