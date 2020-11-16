@@ -109,15 +109,13 @@ class LuckCheckingApp extends React.Component {
   }
 }
 
-class Header extends React.Component {
-  render() {
-    return (
-      <div>
-        <h1>{this.props.title}</h1>
-        <h3>{this.props.subtitle}</h3>
-      </div>
-    )
-  }
+const Header = (props) => {
+  return (
+    <div>
+      <h1>{props.title}</h1>
+      <h3>{props.subtitle}</h3>
+    </div>
+  )
 }
 
 class GenerateRandomNumber extends React.Component {
