@@ -14,7 +14,6 @@ class LuckCheckingApp extends React.Component {
     this.generateUserNumber = this.generateUserNumber.bind(this)
     this.handleAddNote = this.handleAddNote.bind(this)
     this.state = {
-      title: 'Check Your Luck',
       subtitle: 'Let computer generate random number and see how many tries you need to get the same number',
       randomNumber: 0,
       userNumber: 0,
@@ -53,12 +52,16 @@ class LuckCheckingApp extends React.Component {
     }
   }
 
+  /*   handleDeleteNotes() {
+      this.setState(() => {
+        return {
+          notes: []
+        }
+      })
+    } */
+
   handleDeleteNotes() {
-    this.setState(() => {
-      return {
-        notes: []
-      }
-    })
+    this.setState(() => ({ notes: [] }))
   }
 
   handleAddNote(e) {
@@ -81,11 +84,10 @@ class LuckCheckingApp extends React.Component {
     }
   }
 
-
   render() {
     return (
       <div>
-        <Header title={this.state.title} subtitle={this.state.subtitle} />
+        <Header subtitle={this.state.subtitle} />
         <GenerateRandomNumber
           resetAll={this.resetAll}
           generateRandomNumber={this.generateRandomNumber}
@@ -118,11 +120,15 @@ const Header = (props) => {
   )
 }
 
+Header.defaultProps = {
+  title: 'Check Your Luck'
+}
+
 class GenerateRandomNumber extends React.Component {
   render() {
     return (
       <div>
-        <button onClick={this.props.resetAll}>RESET ALL</button>
+        <button onClick={this.props.resetAll}>RESET ALL NUMBERS</button>
         <h4>Generate random number</h4>
         <button onClick={this.props.generateRandomNumber}
           disabled={this.props.randomNumber}
@@ -151,7 +157,7 @@ class GenerateUserNumber extends React.Component {
 const Notes = (props) => {
   return (
     <div>
-      <button onClick={props.handleDeleteNotes}>Delete All Notes</button>
+      <button onClick={props.handleDeleteNotes}>Remove All Notes</button>
       <form>
         <h3>Reminder</h3>
         {props.notes.length === 0 ? <p>Add Note</p> : <p>Notes for today</p>}
@@ -170,7 +176,6 @@ const Note = (props) => {
     </div>
   )
 }
-
 
 class AddNote extends React.Component {
   render() {
