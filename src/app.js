@@ -22,21 +22,16 @@ class LuckCheckingApp extends React.Component {
     }
   }
   resetAll() {
-    this.setState(() => {
-      return {
-        randomNumber: 0,
-        userNumber: 0,
-        tryCount: 0
-      }
+    this.setState(() => ({
+      randomNumber: 0,
+      userNumber: 0,
+      tryCount: 0
     })
+    )
   }
 
   generateRandomNumber() {
-    this.setState(() => {
-      return {
-        randomNumber: Math.ceil(Math.random() * 10)
-      }
-    })
+    this.setState(() => ({ randomNumber: Math.ceil(Math.random() * 10) }))
   }
 
   generateUserNumber() {
@@ -52,13 +47,6 @@ class LuckCheckingApp extends React.Component {
     }
   }
 
-  /*   handleDeleteNotes() {
-      this.setState(() => {
-        return {
-          notes: []
-        }
-      })
-    } */
 
   handleDeleteNotes() {
     this.setState(() => ({ notes: [] }))
