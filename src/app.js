@@ -24,10 +24,21 @@ class LuckCheckingApp extends React.Component {
   }
 
   componentDidMount() {
-    console.log('component did mount')
+    try {
+      const json = localStorage.getItem('notes')
+      const notes = JSON.parse(json);
+      if (notes) {
+        this.setState(() => ({ notes }))
+      }
+    } catch (e) {
+
+    }
+
   }
-  componentDidUpdate() {
-    console.log('componentDidUpdate')
+
+  componentDidUpdate(prevProps, prevState) {
+    const json = JSON.stringify(this.state.notes)
+    localStorage.setItem('notes', json)
   }
 
   resetAll() {
@@ -74,6 +85,7 @@ class LuckCheckingApp extends React.Component {
       this.setState(() => ({ notes: this.state.notes }));
     }
   }
+
   handleDeleteNote(noteToRemove) {
     this.setState((prevState) => ({
       notes: prevState.notes.filter((note) => {
