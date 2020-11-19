@@ -8,11 +8,12 @@ import './styles/styles.scss'
 class LuckCheckingApp extends React.Component {
   constructor(props) {
     super(props)
-    this.resetAll = this.resetAll.bind(this)
-    this.handleDeleteNotes = this.handleDeleteNotes.bind(this)
-    this.generateRandomNumber = this.generateRandomNumber.bind(this)
-    this.generateUserNumber = this.generateUserNumber.bind(this)
-    this.handleAddNote = this.handleAddNote.bind(this)
+    this.resetAll = this.resetAll.bind(this);
+    this.handleDeleteNotes = this.handleDeleteNotes.bind(this);
+    this.generateRandomNumber = this.generateRandomNumber.bind(this);
+    this.generateUserNumber = this.generateUserNumber.bind(this);
+    this.handleAddNote = this.handleAddNote.bind(this);
+    this.handleDeleteNote = this.handleDeleteNote.bind(this);
     this.state = {
       subtitle: 'Let computer generate random number and see how many tries you need to get the same number',
       randomNumber: 0,
@@ -21,6 +22,14 @@ class LuckCheckingApp extends React.Component {
       tryCount: 0,
     }
   }
+
+  componentDidMount() {
+    console.log('component did mount')
+  }
+  componentDidUpdate() {
+    console.log('componentDidUpdate')
+  }
+
   resetAll() {
     this.setState(() => ({
       randomNumber: 0,
@@ -47,29 +56,30 @@ class LuckCheckingApp extends React.Component {
     }
   }
 
-
   handleDeleteNotes() {
     this.setState(() => ({ notes: [] }))
   }
 
   handleAddNote(e) {
     e.preventDefault()
-    const note = e.target.elements.note.value.trim()
+    const note = e.target.elements.note.value.trim();
     if (!note) {
-      alert('Enter valid value to add note!')
+      alert('Enter valid value to add note!');
     } else if (this.state.notes.indexOf(note) > -1) {
-      e.target.elements.note.value = ''
-      alert('This note already exists')
+      e.target.elements.note.value = '';
+      alert('This note already exists');
     } else {
-      this.state.notes.push(note)
-      e.target.elements.note.value = ''
-      console.log(this.state.notes)
-      this.setState(() => {
-        return {
-          notes: this.state.notes
-        }
-      })
+      this.state.notes.push(note);
+      e.target.elements.note.value = '';
+      this.setState(() => ({ notes: this.state.notes }));
     }
+  }
+  handleDeleteNote(noteToRemove) {
+    this.setState((prevState) => ({
+      notes: prevState.notes.filter((note) => {
+        return noteToRemove !== note
+      })
+    }))
   }
 
   render() {
@@ -90,10 +100,12 @@ class LuckCheckingApp extends React.Component {
         <Notes
           notes={this.state.notes}
           handleDeleteNotes={this.handleDeleteNotes}
+          handleDeleteNote={this.handleDeleteNote}
         />
         <AddNote
           handleAddNote={this.handleAddNote}
         />
+
       </div>
     )
   }
@@ -150,7 +162,12 @@ const Notes = (props) => {
         <h3>Reminder</h3>
         {props.notes.length === 0 ? <p>Add Note</p> : <p>Notes for today</p>}
         {
-          props.notes.map((note) => <Note key={note} noteText={note} />)
+          props.notes.map((note) =>
+            <Note
+              key={note}
+              noteText={note}
+              handleDeleteNote={props.handleDeleteNote}
+            />)
         }
       </form>
     </div>
@@ -161,6 +178,11 @@ const Note = (props) => {
   return (
     <div>
       {props.noteText}
+      <button
+        onClick={(e) => {
+          props.handleDeleteNote(props.noteText);
+        }}
+      >Delete</button>
     </div>
   )
 }
@@ -177,6 +199,5 @@ class AddNote extends React.Component {
     )
   }
 }
-
 
 ReactDOM.render(<LuckCheckingApp />, document.getElementById('app'))
