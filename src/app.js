@@ -2,7 +2,11 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import 'normalize.css/normalize.css'
 import './styles/styles.scss'
-//import { template } from 'babel-core'
+import AddNote from './components/AddNote'
+import { Notes } from './components/Notes'
+import { GenerateUserNumber } from './components/GenerateUserNumber';
+import { GenerateRandomNumber } from './components/GenerateRandomNumber.js';
+
 
 
 class LuckCheckingApp extends React.Component {
@@ -31,10 +35,9 @@ class LuckCheckingApp extends React.Component {
         this.setState(() => ({ notes }))
       }
     } catch (e) {
-
     }
-
   }
+
 
   componentDidUpdate(prevProps, prevState) {
     const json = JSON.stringify(this.state.notes)
@@ -136,80 +139,6 @@ Header.defaultProps = {
   title: 'Check Your Luck'
 }
 
-class GenerateRandomNumber extends React.Component {
-  render() {
-    return (
-      <div>
-        <button onClick={this.props.resetAll}>RESET ALL NUMBERS</button>
-        <h4>Generate random number</h4>
-        <button onClick={this.props.generateRandomNumber}
-          disabled={this.props.randomNumber}
-        >Generate Random Number</button>
-        <p>Number : {this.props.randomNumber}</p>
-      </div>
-    )
-  }
-}
 
-class GenerateUserNumber extends React.Component {
-  render() {
-    return (
-      <div>
-        <h4>Generate User number</h4>
-        <button onClick={this.props.generateUserNumber}
-          disabled={!this.props.randomNumber}
-        >Generate User Number</button>
-        <p>Number : {this.props.userNumber}</p>
-        <p>Try count : {this.props.tryCount}</p>
-      </div>
-    )
-  }
-}
-
-const Notes = (props) => {
-  return (
-    <div>
-      <button onClick={props.handleDeleteNotes}>Remove All Notes</button>
-      <form>
-        <h3>Reminder</h3>
-        {props.notes.length === 0 ? <p>Add Note</p> : <p>Notes for today</p>}
-        {
-          props.notes.map((note) =>
-            <Note
-              key={note}
-              noteText={note}
-              handleDeleteNote={props.handleDeleteNote}
-            />)
-        }
-      </form>
-    </div>
-  )
-}
-
-const Note = (props) => {
-  return (
-    <div>
-      {props.noteText}
-      <button
-        onClick={(e) => {
-          props.handleDeleteNote(props.noteText);
-        }}
-      >Delete</button>
-    </div>
-  )
-}
-
-class AddNote extends React.Component {
-  render() {
-    return (
-      <div>
-        <form onSubmit={this.props.handleAddNote}>
-          <input type="text" name="note" />
-          <button>ADD NOTE</button>
-        </form>
-      </div>
-    )
-  }
-}
 
 ReactDOM.render(<LuckCheckingApp />, document.getElementById('app'))
