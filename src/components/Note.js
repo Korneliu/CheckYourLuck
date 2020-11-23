@@ -5,7 +5,7 @@ const Note = (props) => {
     <div>
       {props.noteText}
       <button
-        onClick={(e) => {
+        onClick={() => {
           props.handleDeleteNote(props.noteText);
         }}
       >Delete</button>
