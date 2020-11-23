@@ -7,41 +7,15 @@ import { GenerateRandomNumber } from './GenerateRandomNumber.js';
 import { Header } from './Header'
 
 class LuckCheckingApp extends React.Component {
-  constructor(props) {
-    super(props)
-    this.resetAll = this.resetAll.bind(this);
-    this.handleDeleteNotes = this.handleDeleteNotes.bind(this);
-    this.generateRandomNumber = this.generateRandomNumber.bind(this);
-    this.generateUserNumber = this.generateUserNumber.bind(this);
-    this.handleAddNote = this.handleAddNote.bind(this);
-    this.handleDeleteNote = this.handleDeleteNote.bind(this);
-    this.state = {
-      subtitle: 'Let computer generate random number and see how many tries you need to get the same number',
-      randomNumber: 0,
-      userNumber: 0,
-      notes: [],
-      tryCount: 0,
-    }
+  state = {
+    subtitle: 'Let computer generate random number and see how many tries you need to get the same number',
+    randomNumber: 0,
+    userNumber: 0,
+    notes: [],
+    tryCount: 0,
   }
 
-  componentDidMount() {
-    try {
-      const json = localStorage.getItem('notes')
-      const notes = JSON.parse(json);
-      if (notes) {
-        this.setState(() => ({ notes }))
-      }
-    } catch (e) {
-    }
-  }
-
-
-  componentDidUpdate(prevProps, prevState) {
-    const json = JSON.stringify(this.state.notes)
-    localStorage.setItem('notes', json)
-  }
-
-  resetAll() {
+  resetAll = () => {
     this.setState(() => ({
       randomNumber: 0,
       userNumber: 0,
@@ -50,11 +24,11 @@ class LuckCheckingApp extends React.Component {
     )
   }
 
-  generateRandomNumber() {
+  generateRandomNumber = () => {
     this.setState(() => ({ randomNumber: Math.ceil(Math.random() * 10) }))
   }
 
-  generateUserNumber() {
+  generateUserNumber = () => {
     if (this.state.randomNumber === this.state.userNumber) {
       return alert('bingo')
     } else {
@@ -67,12 +41,12 @@ class LuckCheckingApp extends React.Component {
     }
   }
 
-  handleDeleteNotes() {
+  handleDeleteNotes = () => {
     this.setState(() => ({ notes: [] }))
   }
 
-  handleAddNote(e) {
-    e.preventDefault()
+  handleAddNote = (e) => {
+    e.preventDefault();
     const note = e.target.elements.note.value.trim();
     if (!note) {
       alert('Enter valid value to add note!');
@@ -86,13 +60,38 @@ class LuckCheckingApp extends React.Component {
     }
   }
 
-  handleDeleteNote(noteToRemove) {
+  handleDeleteNote = (noteToRemove) => {
     this.setState((prevState) => ({
       notes: prevState.notes.filter((note) => {
         return noteToRemove !== note
       })
     }))
   }
+
+  componentDidMount() {
+    try {
+      const json = localStorage.getItem('notes')
+      const notes = JSON.parse(json);
+      if (notes) {
+        this.setState(() => ({ notes }))
+      }
+    } catch (e) {
+    }
+  }
+
+  /*   componentDidUpdate(prevProps, prevState) {
+     if (prevState.notes.length !== state.notes.length) {
+       const json = JSON.stringify(this.state.notes)
+       localStorage.setItem('notes', json)
+     }
+   } */
+
+  componentDidUpdate(prevProps, prevState) {
+    console.log(prevState.notes.length)
+    const json = JSON.stringify(this.state.notes)
+    localStorage.setItem('notes', json)
+  }
+
 
   render() {
     return (
