@@ -80,11 +80,11 @@ class LuckCheckingApp extends React.Component {
   }
 
   /*   componentDidUpdate(prevProps, prevState) {
-     if (prevState.notes.length !== state.notes.length) {
-       const json = JSON.stringify(this.state.notes)
-       localStorage.setItem('notes', json)
-     }
-   } */
+    if (prevState.notes.length !== state.notes.length) {
+      const json = JSON.stringify(this.state.notes)
+      localStorage.setItem('notes', json)
+    }
+  } */
 
   componentDidUpdate(prevProps, prevState) {
     console.log(prevState.notes.length)
